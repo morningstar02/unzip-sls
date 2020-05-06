@@ -1,0 +1,36 @@
+# serverless.yml
+
+service: unzipDeploy
+
+custom:
+  # change this name to something unique
+  s3Bucket: html5-adss
+
+
+provider:
+  name: aws
+  region: us-east-2
+  versionFunctions: false
+  # function parameters
+  runtime: nodejs12.x
+  memorySize: 2048 # recommended
+  timeout: 300
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
+
+functions:
+  unzipFetchIndex:
+    handler: prodapp.unzipFetchIndex
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+    environment:
+      S3_REGION: ${self:provider.region}
+      S3_BUCKET: ${self:custom.s3Bucket}
+      accessKeyId: 'AKIAV2QJOTERSA36RT4V'
+      secretAccessKey: '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'
+
