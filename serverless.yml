@@ -9,6 +9,8 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+  - sampleAPIkey
   region: us-east-2
   versionFunctions: false
   # function parameters
@@ -27,10 +29,11 @@ functions:
     handler: prodapp.unzipFetchIndex
     events:
       - http: ANY /
+        private: true
       - http: 'ANY {proxy+}'
+        private: true
     environment:
       S3_REGION: ${self:provider.region}
       S3_BUCKET: ${self:custom.s3Bucket}
-      accessKeyId: 'AKIAV2QJOTERSA36RT4V'
-      secretAccessKey: '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'
-
+      accessKeyId: ${ssm:my-secret-access-id}
+      secretAccessKey: ${ssm:my-secret-access-key}

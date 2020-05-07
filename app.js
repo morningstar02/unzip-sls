@@ -97,7 +97,6 @@ router.post('/unzipAndGetIndex', cors(), async function (req, res) {
   let url = req.body.url;
 
   const uploadedIndexFilePath = await unzipAndGetIndex(url);
-
   res.json({ status: true, message: 'file unzipped successfully', indexFilePath: uploadedIndexFilePath });
 });
 
